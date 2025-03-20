@@ -10,7 +10,7 @@ The D2R FRW Calculator is a web application designed to help users calculate the
 2. Open the `Main.html` file in a web browser to view and interact with the application.
 
 ## Usage
-- Input your values for Total Item FRW, Total Skill FRW, Armor, and Shield.
+- Input appropriate values.
 - The application will automatically calculate and display your Walk Speed, Run Speed, and Charge Speed based on the inputs provided.
 
 ## License

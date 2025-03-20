@@ -27,8 +27,6 @@ Slows Target	10-50	-50
 */
 const baseWalkSpeed = 6;
 const baseRunSpeed = 9;
-let raw_itemFRW, skillFRW, totalSkillFRW;
-let e_itemFRW, speed
 
 //Get the values of the input fields
 function updateInputVars() {
@@ -45,6 +43,9 @@ function updateInputVars() {
     pen_Chilled = document.getElementById('isChilled').checked ? -50 : 0;
     pen_Decrep = document.getElementById('isDecrepified').checked ? -50 : 0;
     pen_Slowed = parseInt(document.getElementById('Slowed').value) * -1 || 0 
+
+    slvl_Blaze = parseInt(document.getElementById('Blaze').value) || 0;
+    buff_Blaze = 2 * slvl_Blaze;
 
     slvl_BOS = parseInt(document.getElementById('BoS').value) || 0;
     buff_BOS = slvl_BOS == 0 ? 0: Math.min(15 + (55 * ( (110*slvl_BOS) / (slvl_BOS+6) ) / 100) , 70)
@@ -72,12 +73,8 @@ function updateSpeeds() {
     updateInputVars();
 
     //Calculate intermediate variables
-
-    //Penalties
-
-
     e_itemFRW = raw_itemFRW * 150 / (raw_itemFRW + 150);
-    totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
+    totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed + buff_Blaze + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
     skillFRW = skillFRW + totalSkillFRW;
 
     speed = e_itemFRW + skillFRW;
@@ -97,7 +94,6 @@ function calculateRunSpeed() {
     runSpeed = baseRunSpeed + ( (baseWalkSpeed * speed) / 100);
     return Math.max(runSpeed, baseWalkSpeed/4);
 }
-
 function calculateChargeSpeed() {
     chargeSpeed = (baseRunSpeed * 1.5) + baseRunSpeed * (1 + Math.max(-50, skillFRW)/100);
     return chargeSpeed;
@@ -115,6 +111,22 @@ function updateShieldLabel() {
     document.getElementById('shield-label').textContent = armorLabel;
 }
 
+function resetAllFields(){
+    const inputGroups = document.getElementsByClassName('input-group');
+    for (let group of inputGroups) {
+        const inputs = group.getElementsByTagName('input');
+        for (let input of inputs) {
+            if (input.type === 'checkbox') {
+                input.checked = false;
+            } else {
+                input.value = input.defaultValue;
+            }
+        }
+    }
+    updateSpeeds();
+    updateArmorLabel();
+    updateShieldLabel();
+}
 /*
 Add event listeners when DOM is loaded
 Input types with ClassName 'input-group' will automatically have event listeners added
@@ -129,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('armor').addEventListener('input', updateArmorLabel);
     document.getElementById('shield').addEventListener('input', updateShieldLabel);
+    document.getElementById('reset-button').addEventListener('click', resetAllFields);
 
     // Initial setup
     updateInputVars();

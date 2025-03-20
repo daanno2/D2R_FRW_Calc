@@ -8,7 +8,8 @@
 </head>
 
 <body>
-    <h1 style="text-align: left; font-size: 2em;">Diablo 2 Effective FRW Calculator</h1>
+    <h1 style="text-align: left; font-size: 2em;">Diablo 2 FRW Calculator</h1>
+    <p style="font-size:14px; font-style: italic;">Calculate your effective frw speed in yards per second</p>
     <div class="output-group">
         <h2 style="text-align: left">Your Speed</h2>
         <div>
@@ -24,7 +25,10 @@
             <span id="charge-speed">0.00</span>
         </div>
     </div>
-    <div class="container">
+    <div><button id="reset-button">Reset</button>
+    </div>
+
+    <div class="container">            
         <div class="CommonOptions">
             <h2 style="text-align: left;">Common Options</h2>
             <div class="input-group">
@@ -82,6 +86,11 @@
         </div>
         <div class="OtherOptions">
             <h2 style="text-align: left;">Additional Options</h2>
+            <div class="input-group">
+                <label for="Blaze">Blaze Speed level</label>
+                <input type="number" id="Blaze" name="Blaze" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Sorc fire skill">&#xf059;</i>
+            </div>
             <div class="input-group">
                 <label for="BoS">Burst of Speed level</label>
                 <input type="number" id="BoS" name="BoS" value="0" min="0">
