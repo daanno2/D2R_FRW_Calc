@@ -9,17 +9,17 @@ ChargeSpeed = BaseRunSpeed * (1 + Skill_FRW / 100 + Armor_Speed / 100) + (BaseRu
 Speed is the sum of all movement speed modifiers, both positive and negative:
 
 Source	Player speed modifier	Maximum
-Faster Run/Walk	[ (150 * FR/W) / (150 + FR/W) ] [6]	+149
-Burst of Speed	min(15 + [55 * [ (110*slvl) / (slvl+6) ] / 100] , 70)	+70
-Frenzy	min(20 + [180 * [ (110*slvl) / (slvl+6) ] / 100] , 200)	+200
-Increased Speed	min(7 + [43 * [ (110*slvl) / (slvl+6) ] / 100] , 50)	+50
-Feral Rage	min(10 + [60 * [ (110 * ( [slvl/2] + 3) ) / ( ( [slvl/2] + 3) + 6) ] / 100] , 70)	+70
-Vigor	min(7 + [43 * [ (110*slvl) / (slvl+6) ] / 100] , 50)	+50
+Faster Run/Walk	( (150 * FR/W) / (150 + FR/W) ) (6)	+149
+Burst of Speed	min(15 + (55 * ( (110*slvl) / (slvl+6) ) / 100) , 70)	+70
+Frenzy	min(20 + (180 * ( (110*slvl) / (slvl+6) ) / 100) , 200)	+200
+Increased Speed	min(7 + (43 * ( (110*slvl) / (slvl+6) ) / 100) , 50)	+50
+Feral Rage	min(10 + (60 * ( (110 * ( (slvl/2) + 3) ) / ( ( (slvl/2) + 3) + 6) ) / 100) , 70)	+70
+Vigor	min(7 + (43 * ( (110*slvl) / (slvl+6) ) / 100) , 50)	+50
 Delirium	+33	+33
 Body armor speed penalty	0/-5/-10	-10
 Shield speed penalty	0/-5/-10	-10
 Cold length	-50	-50
-Holy Freeze	min(-25 + [-35 * [ (110*slvl) /(slvl+6) ] / 100] , -60)	-50
+Holy Freeze	min(-25 + (-35 * ( (110*slvl) /(slvl+6) ) / 100) , -60)	-50
 Decrepify	-50	-50
 Slows Target	10-50	-50
 
@@ -47,22 +47,22 @@ function updateInputVars() {
     pen_Slowed = parseInt(document.getElementById('Slowed').value) * -1 || 0 
 
     slvl_BOS = parseInt(document.getElementById('BoS').value) || 0;
-    buff_BOS = slvl_BOS == 0 ? 0: Math.min(15 + [55 * [ (110*slvl_BOS) / (slvl_BOS+6) ] / 100] , 70)
+    buff_BOS = slvl_BOS == 0 ? 0: Math.min(15 + (55 * ( (110*slvl_BOS) / (slvl_BOS+6) ) / 100) , 70)
 
     slvl_FR = parseInt(document.getElementById('feralRage').value) || 0;
-    buff_FR = slvl_FR == 0 ? 0: Math.min(10 + [60 * [ (110 * ( [slvl_FR/2] + 3) ) / ( ( [slvl_FR/2] + 3) + 6) ] / 100] , 70)
+    buff_FR = slvl_FR == 0 ? 0: Math.min(10 + (60 * ( (110 * ( (slvl_FR/2) + 3) ) / ( ( (slvl_FR/2) + 3) + 6) ) / 100) , 70)
 
     slvl_Frenzy = parseInt(document.getElementById('Frenzy').value) || 0;
-    buff_Frenzy = slvl_Frenzy == 0 ? 0: Math.min(20 + [180 * [ (110*slvl_Frenzy) / (slvl_Frenzy+6) ] / 100] , 200)
+    buff_Frenzy = slvl_Frenzy == 0 ? 0: Math.min(20 + (180 * ( (110*slvl_Frenzy) / (slvl_Frenzy+6) ) / 100) , 200)
 
     slvl_HF = parseInt(document.getElementById('HolyFreeze').value) || 0;
     pen_HF = slvl_HF == 0 ? 0: -1 * Math.min(25 + (35 * ( (110*slvl_HF) /(slvl_HF+6) ) / 100) , 60);
 
     slvl_IS = parseInt(document.getElementById('IncreaseSpeed').value) || 0;
-    buff_IS = slvl_IS == 0 ? 0: Math.min(7 + [43 * [ (110*slvl_IS) / (slvl_IS+6) ] / 100] , 50)
+    buff_IS = slvl_IS == 0 ? 0: Math.min(7 + (43 * ( (110*slvl_IS) / (slvl_IS+6) ) / 100) , 50)
 
     slvl_Vigor = parseInt(document.getElementById('Vigor').value) || 0;
-    buff_Vigor = slvl_Vigor == 0 ? 0: Math.min(7 + [43 * [ (110*slvl_Vigor) / (slvl_Vigor+6) ] / 100] , 50)
+    buff_Vigor = slvl_Vigor == 0 ? 0: Math.min(7 + (43 * ( (110*slvl_Vigor) / (slvl_Vigor+6) ) / 100) , 50)
 
     buff_Delirium = document.getElementById('isDelirium').checked ? 33 : 0;
 }
