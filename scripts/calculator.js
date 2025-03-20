@@ -27,19 +27,44 @@ Slows Target	10-50	-50
 */
 const baseWalkSpeed = 6;
 const baseRunSpeed = 9;
-let raw_itemFRW, skillFRW, armorSpeed, shieldSpeed, isChilled, isDecreped, totalSkillFRW;
+let raw_itemFRW, skillFRW, totalSkillFRW;
 let e_itemFRW, speed
 
+//Get the values of the input fields
 function updateInputVars() {
-    raw_itemFRW = parseFloat(document.getElementById('item-frw').value) || 0;
-    skillFRW = parseFloat(document.getElementById('skill-frw').value) || 0;
-    armor = parseFloat(document.getElementById('armor').value) || 1;
-    shield = parseFloat(document.getElementById('shield').value) || 1;
-    armorSpeed = armor == 2 ? -5 : armor == 3 ? -10 : 0;
-    shieldSpeed = shield == 2 ? -5 : shield == 3 ? -10 : 0; 
-    chilledSpeed = document.getElementById('isChilled').checked ? -50 : 0;
-    decrepedSpeed = document.getElementById('isDecrepified').checked ? -50 : 0;
+    //appears in order on UI
+    raw_itemFRW = parseInt(document.getElementById('item-frw').value) || 0;
+    skillFRW = parseInt(document.getElementById('skill-frw').value) || 0;
 
+    armor = parseInt(document.getElementById('armor').value) || 1;
+    pen_Armor = armor == 2 ? -5 : armor == 3 ? -10 : 0;
+
+    shield = parseInt(document.getElementById('shield').value) || 1;
+    pen_Shield = shield == 2 ? -5 : shield == 3 ? -10 : 0; 
+
+    pen_Chilled = document.getElementById('isChilled').checked ? -50 : 0;
+    pen_Decrep = document.getElementById('isDecrepified').checked ? -50 : 0;
+    pen_Slowed = parseInt(document.getElementById('Slowed').value) * -1 || 0 
+
+    slvl_BOS = parseInt(document.getElementById('BoS').value) || 0;
+    buff_BOS = slvl_BOS == 0 ? 0: Math.min(15 + [55 * [ (110*slvl_BOS) / (slvl_BOS+6) ] / 100] , 70)
+
+    slvl_FR = parseInt(document.getElementById('feralRage').value) || 0;
+    buff_FR = slvl_FR == 0 ? 0: Math.min(10 + [60 * [ (110 * ( [slvl_FR/2] + 3) ) / ( ( [slvl_FR/2] + 3) + 6) ] / 100] , 70)
+
+    slvl_Frenzy = parseInt(document.getElementById('Frenzy').value) || 0;
+    buff_Frenzy = slvl_Frenzy == 0 ? 0: Math.min(20 + [180 * [ (110*slvl_Frenzy) / (slvl_Frenzy+6) ] / 100] , 200)
+
+    slvl_HF = parseInt(document.getElementById('HolyFreeze').value) || 0;
+    pen_HF = slvl_HF == 0 ? 0: -1 * Math.min(25 + (35 * ( (110*slvl_HF) /(slvl_HF+6) ) / 100) , 60);
+
+    slvl_IS = parseInt(document.getElementById('IncreaseSpeed').value) || 0;
+    buff_IS = slvl_IS == 0 ? 0: Math.min(7 + [43 * [ (110*slvl_IS) / (slvl_IS+6) ] / 100] , 50)
+
+    slvl_Vigor = parseInt(document.getElementById('Vigor').value) || 0;
+    buff_Vigor = slvl_Vigor == 0 ? 0: Math.min(7 + [43 * [ (110*slvl_Vigor) / (slvl_Vigor+6) ] / 100] , 50)
+
+    buff_Delirium = document.getElementById('isDelirium').checked ? 33 : 0;
 }
 
 function updateSpeeds() {
@@ -47,8 +72,12 @@ function updateSpeeds() {
     updateInputVars();
 
     //Calculate intermediate variables
+
+    //Penalties
+
+
     e_itemFRW = raw_itemFRW * 150 / (raw_itemFRW + 150);
-    totalSkillFRW = armorSpeed + shieldSpeed + chilledSpeed + decrepedSpeed;
+    totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
     skillFRW = skillFRW + totalSkillFRW;
 
     speed = e_itemFRW + skillFRW;
@@ -60,10 +89,6 @@ function updateSpeeds() {
 }
 
 
-function calculateHolyFreezePenalty(slvl) {
-    //formula from https://www.theamazonbasin.com/wiki/index.php/Holy_Freeze
-    return(Math.min(25 + (35 * ( (110*slvl) /(slvl+6) ) / 100) , 60)); 
-}
 function calculateWalkSpeed() {
     walkSpeed = baseWalkSpeed * (100 + speed) / 100;
     return Math.max(walkSpeed, baseWalkSpeed/4);

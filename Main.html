@@ -1,27 +1,44 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>D2R Effective FRW Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/styles.css">
 </head>
+
 <body>
-    <h1 style="text-align: center; font-size: 2em;">Diablo 2 Effective FRW Calculator</h1>
+    <h1 style="text-align: left; font-size: 2em;">Diablo 2 Effective FRW Calculator</h1>
+    <div class="output-group">
+        <h2 style="text-align: left">Your Speed</h2>
+        <div>
+            <label for="walk-speed">Walk Speed (yds/s):</label>
+            <span id="walk-speed">0.00</span>
+        </div>
+        <div>
+            <label for="run-speed">Run Speed (yds/s):</label>
+            <span id="run-speed">0.00</span>
+        </div>
+        <div>
+            <label for="charge-speed">Charge Speed (yds/s):</label>
+            <span id="charge-speed">0.00</span>
+        </div>
+    </div>
     <div class="container">
-        <div class="input-group">
-            <label for="item-frw">Total Item FRW</label>
-            <i style="font-size:24px" class="fa" title="frw from items and charms; these ARE subject to diminishing returns">&#xf059;</i>
-            <input type="number" id="item-frw" name="item-frw" value="0">
-        </div>
-        <div class="input-group">
-            <label for="skill-frw">Total Skill FRW</label>
-            <i style="font-size:24px" class="fa" title="frw from skills; these are NOT subject to diminishing returns">&#xf059;</i>
-            <input type="number" id="skill-frw" name="skill-frw" value="0">
-        </div>
-        <div class="input-group">
-            <div>
+        <div class="CommonOptions">
+            <h2 style="text-align: left;">Common Options</h2>
+            <div class="input-group">
+                <label for="item-frw">Total Item FRW</label>
+                <input type="number" id="item-frw" name="item-frw" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="frw from items and charms; these ARE subject to diminishing returns">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="skill-frw">Total Skill FRW</label>
+                <input type="number" id="skill-frw" name="skill-frw" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="frw from skills; these are NOT subject to diminishing returns">&#xf059;</i>
+            </div>
+            <div class="input-group">
                 <label for="armor">Armor</label>
-                <i style="font-size:24px" class="fa" title="Medium and Heavy armor have effective frw penalities">&#xf059;</i>
                 <div>
                     <input type="range" id="armor" name="armor" min="1" max="3" value="1" list="armor-ticks">
                     <datalist id="armor-ticks">
@@ -31,10 +48,10 @@
                     </datalist>
                     <span id="armor-label">Light</span>
                 </div>
-            </div> 
-            <div>
-                <label for="shield">Shield</label> 
-                <i style="font-size:24px" class="fa" title="Medium and Heavy shields have effective frw penalities">&#xf059;</i>           
+                <i style="font-size:24px" class="fa" title="Medium and Heavy armor have effective frw penalities">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="shield">Shield</label>
                 <div>
                     <input type="range" id="shield" name="shield" min="1" max="3" value="1" list="shield-ticks">
                     <datalist id="shield-ticks">
@@ -43,36 +60,67 @@
                         <option value="3"></option>
                     </datalist>
                     <span id="shield-label">Light</span>
+                    <i style="font-size:24px" class="fa"
+                    title="Medium and Heavy shields have effective frw penalities">&#xf059;</i>
                 </div>
-            </div> 
-            <div>
+            </div>
+            <div class="input-group">
                 <label for="isChilled">Chilled</label>
                 <input type="checkbox" id="isChilled" name="isChilled">
                 <i style="font-size:24px" class="fa" title="Chilled from cold attacks">&#xf059;</i>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="isDecrepified">Decrepified:</label>
                 <input type="checkbox" id="isDecrepified" name="isDecrepified">
                 <i style="font-size:24px" class="fa" title="Decrepify curse">&#xf059;</i>
             </div>
-        </div>
-
-        <div class="output-group">
-            <div>
-            <label for="walk-speed">Walk Speed (yds/s):</label>
-            <span id="walk-speed">0.00</span>
-        </div>
-            <div>
-            <label for="run-speed">Run Speed (yds/s):</label>
-            <span id="run-speed">0.00</span>
-        </div>
-            <div>
-            <label for="charge-speed">Charge Speed (yds/s):</label>
-            <span id="charge-speed">0.00</span>
+            <div class="input-group">
+                <label for="Slowed">Slowed by %</label>
+                <input type="number" id="Slowed" name="Slowed" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Slowed is a specific modifier">&#xf059;</i>
             </div>
+        </div>
+        <div class="OtherOptions">
+            <h2 style="text-align: left;">Additional Options</h2>
+            <div class="input-group">
+                <label for="BoS">Burst of Speed level</label>
+                <input type="number" id="BoS" name="BoS" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Assasin Shadow Disc skill">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="feralRage">Feral Rage level</label>
+                <input type="number" id="feralRage" name="feralRage" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Druid shapeshift skill with max bonus">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="Frenzy">Frenzy level</label>
+                <input type="number" id="Frenzy" name="Frenzy" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Barb skill, at max stacks">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="HolyFreeze">Holy Freeze level</label>
+                <input type="number" id="HolyFreeze" name="HolyFreeze" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Slowed by aura">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="IncreasedSpeed">Increase Speed level</label>
+                <input type="number" id="IncreaseSpeed" name="IncreaseSpeed" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Barb passive skill">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="Vigor">Vigor level</label>
+                <input type="number" id="Vigor" name="Vigor" value="0" min="0">
+                <i style="font-size:24px" class="fa" title="Paladin Aura">&#xf059;</i>
+            </div>
+            <div class="input-group">
+                <label for="isDelirium">Delirium Doll</label>
+                <input type="checkbox" id="isDelirium" name="isDelirium">
+                <i style="font-size:24px" class="fa" title="Transformed into doll from Delirium runeword">&#xf059;</i>
+            </div>
+        </div>
 
 
-    </div>
-    <script src="scripts/calculator.js"></script>
+        <script src="scripts/calculator.js"></script>
 </body>
+
 </html>
