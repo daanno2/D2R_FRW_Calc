@@ -32,7 +32,6 @@ const baseRunSpeed = 9;
 function updateInputVars() {
     //appears in order on UI
     raw_itemFRW = parseInt(document.getElementById('item-frw').value) || 0;
-    skillFRW = parseInt(document.getElementById('skill-frw').value) || 0;
 
     armor = parseInt(document.getElementById('armor').value) || 1;
     pen_Armor = armor == 2 ? -5 : armor == 3 ? -10 : 0;
@@ -73,6 +72,7 @@ function updateSpeeds() {
     updateInputVars();
 
     //Calculate intermediate variables
+    skillFRW = 0;
     e_itemFRW = raw_itemFRW * 150 / (raw_itemFRW + 150);
     totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed + buff_Blaze + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
     skillFRW = skillFRW + totalSkillFRW;
