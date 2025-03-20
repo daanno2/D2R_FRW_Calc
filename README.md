@@ -7,11 +7,12 @@ The D2R FRW Calculator is a web application designed to help users calculate the
 
 ## Setup
 1. Clone the repository to your local machine.
-2. Open the `Main.html` file in a web browser to view and interact with the application.
+2. Open the `index.html` file in a web browser to view and interact with the application.
 
 ## Usage
 - Input appropriate values.
 - The application will automatically calculate and display your Walk Speed, Run Speed, and Charge Speed based on the inputs provided.
+- Press 'reset' to reset all input values
 
 ## License
 This project is licensed under the MIT License.
