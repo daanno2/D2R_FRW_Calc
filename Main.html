@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>D2R Effective FRW Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <h1 style="text-align: center; font-size: 2em;">Diablo 2 Effective FRW Calculator</h1>
+    <div class="container">
+        <div class="input-group">
+            <label for="item-frw">Total Item FRW</label>
+            <i style="font-size:24px" class="fa" title="frw from items and charms; these ARE subject to diminishing returns">&#xf059;</i>
+            <input type="number" id="item-frw" name="item-frw" value="0">
+        </div>
+        <div class="input-group">
+            <label for="skill-frw">Total Skill FRW</label>
+            <i style="font-size:24px" class="fa" title="frw from skills; these are NOT subject to diminishing returns">&#xf059;</i>
+            <input type="number" id="skill-frw" name="skill-frw" value="0">
+        </div>
+        <div class="input-group">
+            <div>
+                <label for="armor">Armor</label>
+                <i style="font-size:24px" class="fa" title="Medium and Heavy armor have effective frw penalities">&#xf059;</i>
+                <div>
+                    <input type="range" id="armor" name="armor" min="1" max="3" value="1" list="armor-ticks">
+                    <datalist id="armor-ticks">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                    </datalist>
+                    <span id="armor-label">Light</span>
+                </div>
+            </div> 
+            <div>
+                <label for="shield">Shield</label> 
+                <i style="font-size:24px" class="fa" title="Medium and Heavy shields have effective frw penalities">&#xf059;</i>           
+                <div>
+                    <input type="range" id="shield" name="shield" min="1" max="3" value="1" list="shield-ticks">
+                    <datalist id="shield-ticks">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                    </datalist>
+                    <span id="shield-label">Light</span>
+                </div>
+            </div> 
+            <div>
+                <label for="isChilled">Chilled</label>
+                <input type="checkbox" id="isChilled" name="isChilled">
+                <i style="font-size:24px" class="fa" title="Chilled from cold attacks">&#xf059;</i>
+            </div>
+            <div>
+                <label for="isDecrepified">Decrepified:</label>
+                <input type="checkbox" id="isDecrepified" name="isDecrepified">
+                <i style="font-size:24px" class="fa" title="Decrepify curse">&#xf059;</i>
+            </div>
+        </div>
+
+        <div class="output-group">
+            <div>
+            <label for="walk-speed">Walk Speed (yds/s):</label>
+            <span id="walk-speed">0.00</span>
+        </div>
+            <div>
+            <label for="run-speed">Run Speed (yds/s):</label>
+            <span id="run-speed">0.00</span>
+        </div>
+            <div>
+            <label for="charge-speed">Charge Speed (yds/s):</label>
+            <span id="charge-speed">0.00</span>
+            </div>
+
+
+    </div>
+    <script src="scripts/calculator.js"></script>
+</body>
+</html>
