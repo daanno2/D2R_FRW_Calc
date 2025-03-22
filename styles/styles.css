@@ -14,6 +14,9 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
 }
+div.output-group > div {
+    font-size: 20px;
+}
 
 .container {
     display: flex;

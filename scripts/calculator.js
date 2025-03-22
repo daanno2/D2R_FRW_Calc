@@ -27,6 +27,12 @@ Slows Target	10-50	-50
 */
 const baseWalkSpeed = 6;
 const baseRunSpeed = 9;
+const x_graph_max = 300;
+
+let x_frw = [];
+for(i=0; i<=x_graph_max; i+=5){
+    x_frw.push(i);
+}
 
 //Get the values of the input fields
 function updateInputVars() {
@@ -41,7 +47,7 @@ function updateInputVars() {
 
     pen_Chilled = document.getElementById('isChilled').checked ? -50 : 0;
     pen_Decrep = document.getElementById('isDecrepified').checked ? -50 : 0;
-    pen_Slowed = parseInt(document.getElementById('Slowed').value) * -1 || 0 
+    pen_Slowed = -1* Math.min(50, parseInt(document.getElementById('Slowed').value) || 0 ) 
 
     slvl_Blaze = parseInt(document.getElementById('Blaze').value) || 0;
     buff_Blaze = 2 * slvl_Blaze;
@@ -56,7 +62,13 @@ function updateInputVars() {
     buff_Frenzy = slvl_Frenzy == 0 ? 0: Math.min(20 + (180 * ( (110*slvl_Frenzy) / (slvl_Frenzy+6) ) / 100) , 200)
 
     slvl_HF = parseInt(document.getElementById('HolyFreeze').value) || 0;
-    pen_HF = slvl_HF == 0 ? 0: -1 * Math.min(25 + (35 * ( (110*slvl_HF) /(slvl_HF+6) ) / 100) , 60);
+
+    /* note: -60 is the max HF slowdown in theory, but players have chill effectivness of -50,
+     so for these purposes we're setting it to -50
+    https://www.theamazonbasin.com/wiki/index.php/Chill_effectiveness
+     */
+    //pen_HF = slvl_HF == 0 ? 0: -1 * Math.min(25 + (35 * ( (110*slvl_HF) /(slvl_HF+6) ) / 100) , 60);
+    pen_HF = slvl_HF == 0 ? 0: -1 * Math.min(25 + (35 * ( (110*slvl_HF) /(slvl_HF+6) ) / 100) , 50);
 
     slvl_IS = parseInt(document.getElementById('IncreaseSpeed').value) || 0;
     buff_IS = slvl_IS == 0 ? 0: Math.min(7 + (43 * ( (110*slvl_IS) / (slvl_IS+6) ) / 100) , 50)
@@ -71,32 +83,42 @@ function updateSpeeds() {
     //first, update the input variables
     updateInputVars();
 
-    //Calculate intermediate variables
-    skillFRW = 0;
-    e_itemFRW = raw_itemFRW * 150 / (raw_itemFRW + 150);
-    totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed + buff_Blaze + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
-    skillFRW = skillFRW + totalSkillFRW;
+    totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed 
+    + buff_Blaze + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
 
-    speed = e_itemFRW + skillFRW;
 
     //calculate final variables and refresh the UI
-    document.getElementById('walk-speed').textContent = calculateWalkSpeed().toFixed(2);
-    document.getElementById('run-speed').textContent = calculateRunSpeed().toFixed(2);
-    document.getElementById('charge-speed').textContent = calculateChargeSpeed().toFixed(2);
+    document.getElementById('walk-speed').textContent = calculateWalkSpeed(caculateSpeed());
+    document.getElementById('run-speed').textContent = calculateRunSpeed(caculateSpeed());
+    document.getElementById('charge-speed').textContent = calculateChargeSpeed();
+    if(document.getElementById("frwChart").style.display != "none"){
+        updateChart();
+    }
 }
 
+function caculateSpeed(f_raw_itemFRW=0) {
+    if(f_raw_itemFRW == 0){
+        f_raw_itemFRW = raw_itemFRW;
+    }
+    //Calculate intermediate variables
+    e_itemFRW = f_raw_itemFRW * 150 / (f_raw_itemFRW + 150);
+    speed = e_itemFRW + totalSkillFRW;
 
-function calculateWalkSpeed() {
+    return speed;
+}
+
+function calculateWalkSpeed(speed) {
     walkSpeed = baseWalkSpeed * (100 + speed) / 100;
-    return Math.max(walkSpeed, baseWalkSpeed/4);
+    return Math.max(walkSpeed, baseWalkSpeed/4).toFixed(2);
 }
-function calculateRunSpeed() {
+
+function calculateRunSpeed(speed) {
     runSpeed = baseRunSpeed + ( (baseWalkSpeed * speed) / 100);
-    return Math.max(runSpeed, baseWalkSpeed/4);
+    return Math.max(runSpeed, baseWalkSpeed/4).toFixed(2);
 }
 function calculateChargeSpeed() {
-    chargeSpeed = (baseRunSpeed * 1.5) + baseRunSpeed * (1 + Math.max(-50, skillFRW)/100);
-    return chargeSpeed;
+    chargeSpeed = (baseRunSpeed * 1.5) + baseRunSpeed * (1 + Math.max(-50, totalSkillFRW)/100);
+    return chargeSpeed.toFixed(2);
 }
 
 function updateArmorLabel() {
@@ -110,7 +132,71 @@ function updateShieldLabel() {
     const armorLabel = armorValue == 1 ? 'Light' : armorValue == 2 ? 'Medium' : 'Heavy';
     document.getElementById('shield-label').textContent = armorLabel;
 }
+function showHideGraph() {
+    var x = document.getElementById("frwChart");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+        updateChart();
+        document.getElementById('showHideGraph').textContent = "Hide Graph";
+    } else {
+        x.style.display = "none";
+        document.getElementById('showHideGraph').textContent = "Show Graph";
+    }
+}
+function updateChart(){
 
+    let y_walk = [];
+    let y_run = [];
+
+    for(i=0; i<x_frw.length; i++) {
+        y_walk_val = calculateWalkSpeed(caculateSpeed(x_frw[i]));
+        y_run_val = calculateRunSpeed(caculateSpeed(x_frw[i]));
+        y_walk.push(y_walk_val);
+        y_run.push(y_run_val);
+    }
+    var walkGraph = {
+        name: 'Walk',
+        x: x_frw,
+        y: y_walk,
+        mode: 'markers',
+        type: 'scatter'
+    };
+    var runGraph = {
+        name: 'Run',
+        x: x_frw,
+        y: y_run,
+        mode: 'markers',
+        type: 'scatter'
+    };
+    var layout = {
+        title: {
+            text: "Effective FRW vs Equip FRW at current settings",
+            automargin: true
+        },
+        xaxis: {range: [0, x_graph_max], title: {text: "Equipment frw"}},
+        yaxis: {range: [3, 20],  title: {text: "Yards/s"}},
+        hovermode: 'x unified',
+        showlegend: true,
+        legend: {
+            x: 1,
+            xanchor: 'right',
+            y: 1
+          },
+        margin: { t: 0 },
+        paper_bgcolor: 'black',
+        plot_bgcolor: 'grey',
+        font: {
+            color: 'white'
+        }
+    };
+    var config = {
+        displaylogo: false,
+        responsive: true,
+        displayModeBar: true,
+        modeBarButtonsToRemove: ['toImage', 'zoom2d','select2d', 'lasso2d', 'sendDataToCloud', 'autoScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+        };
+    Plotly.newPlot("frwChart", [walkGraph,runGraph], layout, config);
+}
 function resetAllFields(){
     const inputGroups = document.getElementsByClassName('input-group');
     for (let group of inputGroups) {
@@ -142,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('armor').addEventListener('input', updateArmorLabel);
     document.getElementById('shield').addEventListener('input', updateShieldLabel);
     document.getElementById('reset-button').addEventListener('click', resetAllFields);
+    document.getElementById('showHideGraph').addEventListener('click', showHideGraph);
 
     // Initial setup
     updateInputVars();

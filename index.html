@@ -5,11 +5,14 @@
     <title>D2R Effective FRW Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+    <script src="scripts/calculator.js"></script>
 </head>
 
 <body>
     <h1 style="text-align: left; font-size: 2em;">Diablo 2 FRW Calculator</h1>
     <p style="font-size:14px; font-style: italic;">Calculate your effective frw speed in yards per second</p>
+
     <div class="output-group">
         <h2 style="text-align: left">Your Speed</h2>
         <div>
@@ -24,16 +27,19 @@
             <label for="charge-speed">Charge Speed (yds/s):</label>
             <span id="charge-speed">0.00</span>
         </div>
+        <div class="frwChart" id="frwChart" style="display: none;"></div>
     </div>
+
     <div><button id="reset-button">Reset</button>
+        <button id="showHideGraph">Show Graph</button>
     </div>
 
     <div class="container">            
         <div class="CommonOptions">
             <h2 style="text-align: left;">Common Options</h2>
             <div class="input-group">
-                <label for="item-frw">Total Item FRW</label>
-                <input type="number" id="item-frw" name="item-frw" value="0" min="0">
+                <label for="item-frw">Total Equipment FRW</label>
+                <input type="number" id="item-frw" name="item-frw" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="frw from items and charms; these ARE subject to diminishing returns">&#xf059;</i>
             </div>
             <div class="input-group">
@@ -75,45 +81,45 @@
             </div>
             <div class="input-group">
                 <label for="Slowed">Slowed by %</label>
-                <input type="number" id="Slowed" name="Slowed" value="0" min="0">
+                <input type="number" id="Slowed" name="Slowed" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Slowed is a specific modifier">&#xf059;</i>
             </div>
         </div>
         <div class="OtherOptions">
             <h2 style="text-align: left;">Additional Options</h2>
             <div class="input-group">
-                <label for="Blaze">Blaze Speed level</label>
-                <input type="number" id="Blaze" name="Blaze" value="0" min="0">
+                <label for="Blaze">Blaze level</label>
+                <input type="number" id="Blaze" name="Blaze" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Sorc fire skill">&#xf059;</i>
             </div>
             <div class="input-group">
                 <label for="BoS">Burst of Speed level</label>
-                <input type="number" id="BoS" name="BoS" value="0" min="0">
+                <input type="number" id="BoS" name="BoS" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Assasin Shadow Disc skill">&#xf059;</i>
             </div>
             <div class="input-group">
                 <label for="feralRage">Feral Rage level</label>
-                <input type="number" id="feralRage" name="feralRage" value="0" min="0">
+                <input type="number" id="feralRage" name="feralRage" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Druid shapeshift skill with max bonus">&#xf059;</i>
             </div>
             <div class="input-group">
                 <label for="Frenzy">Frenzy level</label>
-                <input type="number" id="Frenzy" name="Frenzy" value="0" min="0">
+                <input type="number" id="Frenzy" name="Frenzy" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Barb skill, at max stacks">&#xf059;</i>
             </div>
             <div class="input-group">
                 <label for="HolyFreeze">Holy Freeze level</label>
-                <input type="number" id="HolyFreeze" name="HolyFreeze" value="0" min="0">
+                <input type="number" id="HolyFreeze" name="HolyFreeze" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Slowed by aura">&#xf059;</i>
             </div>
             <div class="input-group">
                 <label for="IncreasedSpeed">Increase Speed level</label>
-                <input type="number" id="IncreaseSpeed" name="IncreaseSpeed" value="0" min="0">
+                <input type="number" id="IncreaseSpeed" name="IncreaseSpeed" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Barb passive skill">&#xf059;</i>
             </div>
             <div class="input-group">
                 <label for="Vigor">Vigor level</label>
-                <input type="number" id="Vigor" name="Vigor" value="0" min="0">
+                <input type="number" id="Vigor" name="Vigor" value="0" min="0" onFocus="this.select()">
                 <i style="font-size:24px" class="fa" title="Paladin Aura">&#xf059;</i>
             </div>
             <div class="input-group">
@@ -123,8 +129,26 @@
             </div>
         </div>
 
+    </div>
+    <div>
+        <h2 style="text-align: left;">Notes/Explanations</h2>
+        <ul>
+            <li>FRW from the affix on equip/charms is subject to diminishing returns</li>
+            <li>All other forms of frw bonuses/peanalties are not subject to diminishing returns</li>
+            <li>Charge speed is unaffected by item-based frw</li>
+            <li>The calculated results here may be very slightly due to lack of truncation handling</li>
 
-        <script src="scripts/calculator.js"></script>
+        </ul>
+    </div>
+    <div>
+        <h2 style="text-align: left;">Useful references</h2>
+        <p style="text-align: left;">
+        <a href="https://diablo2.diablowiki.net/Faster_Run_Walk" target="_blank">Faster Run/Walk - Diablo Wiki</a><br>
+        <a href="https://www.theamazonbasin.com/wiki/index.php/Walk/run_speed" target="_blank">Walk/Run Speed - The Amazon Basin</a><br>
+        <a href="https://www.theamazonbasin.com/wiki/index.php/Chill_effectiveness" target="_blank">Chill Effectiveness - The Amazon Basin</a><br>
+        <a href="https://www.theamazonbasin.com/wiki/index.php/Charge" target="_blank">Charge - The Amazon Basin</a>
+        </p>
+    </div>
 </body>
 
 </html>
