@@ -101,10 +101,10 @@ function caculateSpeed(f_raw_itemFRW=0) {
         f_raw_itemFRW = raw_itemFRW;
     }
     //Calculate intermediate variables
-    e_itemFRW = f_raw_itemFRW * 150 / (f_raw_itemFRW + 150);
-    speed = e_itemFRW + totalSkillFRW;
+    e_itemFRW = f_raw_itemFRW * 150 / (f_raw_itemFRW + 150); //https://github.com/ThePhrozenKeep/D2MOO/blob/8322494ed1f715ad51552f169df76cf600fabc71/source/D2Common/src/Units/Units.cpp#L1248
+    speed = Math.trunc(e_itemFRW) + Math.trunc(totalSkillFRW); //https://github.com/ThePhrozenKeep/D2MOO/blob/8322494ed1f715ad51552f169df76cf600fabc71/source/D2Common/src/Units/Units.cpp#L1677
 
-    return speed;
+    return Math.trunc(speed);
 }
 
 function calculateWalkSpeed(speed) {
@@ -113,14 +113,15 @@ function calculateWalkSpeed(speed) {
 }
 
 function calculateRunSpeed(speed) {
-    runSpeed = baseRunSpeed + ( (baseWalkSpeed * speed) / 100);
+    runSpeed = baseRunSpeed + (baseWalkSpeed * speed) / 100;
     return Math.max(runSpeed, baseWalkSpeed/4).toFixed(2);
 }
 function calculateChargeSpeed() {
     chargeSpeed = (baseRunSpeed * 1.5) + baseRunSpeed * (1 + Math.max(-50, totalSkillFRW)/100);
     return chargeSpeed.toFixed(2);
 }
-
+//todo: add knockback speed calc?
+//void __stdcall UNITS_CharacterStartRunningOrKnockback(D2UnitStrc* pUnit, int nClassId)
 function updateArmorLabel() {
     const armorValue = document.getElementById('armor').value;
     const armorLabel = armorValue == 1 ? 'Light' : armorValue == 2 ? 'Medium' : 'Heavy';
