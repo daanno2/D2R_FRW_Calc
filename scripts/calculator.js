@@ -15,7 +15,7 @@ Frenzy	min(20 + (180 * ( (110*slvl) / (slvl+6) ) / 100) , 200)	+200
 Increased Speed	min(7 + (43 * ( (110*slvl) / (slvl+6) ) / 100) , 50)	+50
 Feral Rage	min(10 + (60 * ( (110 * ( (slvl/2) + 3) ) / ( ( (slvl/2) + 3) + 6) ) / 100) , 70)	+70
 Vigor	min(7 + (43 * ( (110*slvl) / (slvl+6) ) / 100) , 50)	+50
-Delirium	+33	+33
+Delirium	+33	+33 note: this comes from the "delerium change" skill in skill.txt
 Body armor speed penalty	0/-5/-10	-10
 Shield speed penalty	0/-5/-10	-10
 Cold length	-50	-50
@@ -25,8 +25,8 @@ Slows Target	10-50	-50
 
 
 */
-const baseWalkSpeed = 6;
-const baseRunSpeed = 9;
+var baseWalkSpeed = 6;
+var baseRunSpeed = 9;
 const x_graph_max = 300;
 
 let x_frw = [];
@@ -77,6 +77,8 @@ function updateInputVars() {
     buff_Vigor = slvl_Vigor == 0 ? 0: Math.min(7 + (43 * ( (110*slvl_Vigor) / (slvl_Vigor+6) ) / 100) , 50)
 
     buff_Delirium = document.getElementById('isDelirium').checked ? 33 : 0;
+    document.getElementById('isDelirium').checked ? baseRunSpeed = 6 : baseRunSpeed = 9;
+
 }
 
 function updateSpeeds() {
