@@ -29,6 +29,11 @@ var baseWalkSpeed = 6;
 var baseRunSpeed = 9;
 const x_graph_max = 300;
 
+var raw_itemFRW;
+var e_itemFRW;
+var totalSkillFRW;
+var e_totalFrwBonus;
+
 let x_frw = [];
 for(i=0; i<=x_graph_max; i+=5){
     x_frw.push(i);
@@ -85,28 +90,28 @@ function updateSpeeds() {
     //first, update the input variables
     updateInputVars();
 
-    totalSkillFRW = pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed 
-    + buff_Blaze + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium;
+    totalSkillFRW = Math.trunc(pen_Armor + pen_Shield + pen_Chilled + pen_Decrep + pen_Slowed 
+    + buff_Blaze + buff_BOS + buff_FR + buff_Frenzy + pen_HF + buff_IS + buff_Vigor + buff_Delirium);
 
 
     //calculate final variables and refresh the UI
-    document.getElementById('walk-speed').textContent = calculateWalkSpeed(caculateSpeed());
-    document.getElementById('run-speed').textContent = calculateRunSpeed(caculateSpeed());
+    e_totalFrwBonus = calculatee_totalFrwBonus(raw_itemFRW);
+
+    document.getElementById('walk-speed').textContent = calculateWalkSpeed(e_totalFrwBonus);
+    document.getElementById('run-speed').textContent = calculateRunSpeed(e_totalFrwBonus);
     document.getElementById('charge-speed').textContent = calculateChargeSpeed();
+    document.getElementById('efrw').textContent =  e_totalFrwBonus + "% (Items: " + e_itemFRW + "%, Skills: " + totalSkillFRW + "%)";
     if(document.getElementById("frwChart").style.display != "none"){
         updateChart();
     }
 }
 
-function caculateSpeed(f_raw_itemFRW=0) {
-    if(f_raw_itemFRW == 0){
-        f_raw_itemFRW = raw_itemFRW;
-    }
+function calculatee_totalFrwBonus(f_raw_itemFRW) {
     //Calculate intermediate variables
-    e_itemFRW = f_raw_itemFRW * 150 / (f_raw_itemFRW + 150); //https://github.com/ThePhrozenKeep/D2MOO/blob/8322494ed1f715ad51552f169df76cf600fabc71/source/D2Common/src/Units/Units.cpp#L1248
-    speed = Math.trunc(e_itemFRW) + Math.trunc(totalSkillFRW); //https://github.com/ThePhrozenKeep/D2MOO/blob/8322494ed1f715ad51552f169df76cf600fabc71/source/D2Common/src/Units/Units.cpp#L1677
+    e_itemFRW = Math.trunc(f_raw_itemFRW * 150 / (f_raw_itemFRW + 150)); //https://github.com/ThePhrozenKeep/D2MOO/blob/8322494ed1f715ad51552f169df76cf600fabc71/source/D2Common/src/Units/Units.cpp#L1248
+    speed = e_itemFRW + totalSkillFRW; //https://github.com/ThePhrozenKeep/D2MOO/blob/8322494ed1f715ad51552f169df76cf600fabc71/source/D2Common/src/Units/Units.cpp#L1677
 
-    return Math.trunc(speed);
+    return speed;
 }
 
 function calculateWalkSpeed(speed) {
@@ -152,8 +157,8 @@ function updateChart(){
     let y_run = [];
 
     for(i=0; i<x_frw.length; i++) {
-        y_walk_val = calculateWalkSpeed(caculateSpeed(x_frw[i]));
-        y_run_val = calculateRunSpeed(caculateSpeed(x_frw[i]));
+        y_walk_val = calculateWalkSpeed(calculatee_totalFrwBonus(x_frw[i]));
+        y_run_val = calculateRunSpeed(calculatee_totalFrwBonus(x_frw[i]));
         y_walk.push(y_walk_val);
         y_run.push(y_run_val);
     }
