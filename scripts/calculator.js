@@ -220,7 +220,87 @@ function resetAllFields(){
     updateSpeeds();
     updateArmorLabel();
     updateShieldLabel();
+    updateUrlParams(); 
 }
+function setInputsFromUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Handle number and checkbox inputs
+    const inputMap = {
+        'item-frw': 'number',
+        'armor': 'range',
+        'shield': 'range',
+        'isChilled': 'checkbox',
+        'isDecrepified': 'checkbox',
+        'Slowed': 'number',
+        'Blaze': 'number',
+        'BoS': 'number',
+        'feralRage': 'number',
+        'Frenzy': 'number',
+        'HolyFreeze': 'number',
+        'IncreaseSpeed': 'number',
+        'Vigor': 'number',
+        'isDelirium': 'checkbox'
+    };
+
+    for (const [inputId, inputType] of Object.entries(inputMap)) {
+        if (urlParams.has(inputId)) {
+            const element = document.getElementById(inputId);
+            if (element) {
+                if (inputType === 'checkbox') {
+                    element.checked = urlParams.get(inputId) === 'true';
+                } else {
+                    element.value = urlParams.get(inputId);
+                }
+            }
+        }
+    }
+}
+
+function updateUrlParams() {
+    const params = new URLSearchParams();
+    const inputGroups = document.getElementsByClassName('input-group');
+    
+    for (let group of inputGroups) {
+        const inputs = group.getElementsByTagName('input');
+        for (let input of inputs) {
+            const value = input.type === 'checkbox' ? input.checked : input.value;
+            if (value && value !== '0' && value !== 'false') {
+                params.set(input.id, value);
+            }
+        }
+    }
+
+    // Update URL without reloading the page
+    const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+    window.history.pushState({}, '', newUrl);
+}
+
+// Modify the DOMContentLoaded event listener to include URL parameter handling
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing code...
+    
+    // Add URL parameter handling to inputs
+    const inputGroups = document.getElementsByClassName('input-group');
+    for (let group of inputGroups) {
+        const inputs = group.getElementsByTagName('input');
+        for (let input of inputs) {
+            input.addEventListener('input', () => {
+                updateSpeeds();
+                updateUrlParams();
+            });
+        }
+    }
+
+    // Set initial values from URL parameters if they exist
+    setInputsFromUrlParams();
+    
+    // Initial setup
+    updateInputVars();
+    updateSpeeds();
+    updateArmorLabel();
+    updateShieldLabel();
+});
 /*
 Add event listeners when DOM is loaded
 Input types with ClassName 'input-group' will automatically have event listeners added
